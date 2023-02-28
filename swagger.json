@@ -1,0 +1,574 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Zapp Revamp Backend",
+        "description": "Zapp Revamp Backend",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:4000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Users",
+            "description": "API for users in the system"
+        },
+        {
+            "name": "Files",
+            "description": "API for file handling"
+        },
+        {
+            "name": "Payment",
+            "description": "API for file topup"
+        }
+
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": 
+    {
+        "/user/create": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CreateUser"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New User creating APi"
+                    }
+                }
+            }
+        },
+        "/authenticate": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "Credential and Password Mandatory. Credential can be email or zappId",
+                        "schema": {
+                            "$ref": "#/definitions/AuthPayload"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "authentication successfull"
+                    }
+                }
+            }
+            
+        },
+        "/user/update": {            
+            "put": {
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "use *x-access-token* inside header",
+                        "required": true
+                    },
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "zappId/email/phonenumber",
+                        "schema": {
+                            "$ref": "#/definitions/UpdatePayload"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User updated",
+                        "schema": {
+                            "$ref": "#/definitions/UpdatePayload"
+                        }
+                    }
+                }
+            }
+            
+        },
+        "/user/sms-tac": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "contact number with country code Ex- [60]**********",
+                        "schema": {
+                            "$ref": "#/definitions/SmsPayload"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sms Tac Sent."
+                    }
+                }
+            }
+            
+        },
+        "/user/sms-tac/use": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "Give contact number and Tac",
+                        "schema": {
+                            "$ref": "#/definitions/TacVerificationPayload"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tac Verification"
+                    }
+                }
+            }
+            
+        },
+        "/user/search": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "zappId/email/phonenumber",
+                        "schema": {
+                            "$ref": "#/definitions/UserSearchPayload"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont is for login as well as token verification."
+                    }
+                }
+            }
+            
+        },
+        "/user/invite-code/generate": {            
+            "get": {
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "in header",
+                        "schema": {
+                            "$ref": "#/definitions/generateInviteCode"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont is for generating Invite code"
+                    }
+                }
+            }
+            
+        },
+        "/user/invite-code/check": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "inviteCode",
+                        "in": "body",
+                        "description": "in body payload",
+                        "schema": {
+                            "$ref": "#/definitions/CheckInviteCode"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont is for checking Invite code"
+                    }
+                }
+            }
+            
+        },
+        "/user/invite-code/use": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "In body payload inviteCode,inviteCodeUser",
+                        "schema": {
+                            "$ref": "#/definitions/UseInviteCode"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont is for using  Invite code and crediting amount to respective account."
+                    }
+                }
+            }
+            
+        },
+        "/file/security-image/get": {            
+            "get": {
+                "tags": [
+                    "Files"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont is for getting random security images"
+                    }
+                }
+            }          
+        },
+        "/file/security-image/getall": {            
+            "get": {
+                "tags": [
+                    "Files"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont is for getting all resource"
+                    }
+                }
+            }          
+        },
+        "/file/security-image/add": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "form",
+                        "description": "Name browse file name as 'file'"
+                    }
+                ],
+                "tags": [
+                    "Files"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Upload resources endpoint(single file).",
+                        "schema": {
+                            "$ref": "#/definitions/uploadfile"
+                        }
+                    }
+                }
+            }         
+        },
+        "/file/security-image/delete": {            
+            "delete": {
+                "parameters": [
+                    {
+                        "name": "deleteId",
+                        "in": "body",
+                        "description": "give file id you want to delete. To get id visit following endpoint =>'file/security-image/getall' "
+                    }
+                ],
+                "tags": [
+                    "Files"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resource deleted",
+                        "schema": {
+                            "$ref": "#/definitions/deleteResource"
+                        }
+                    }
+                }
+            }         
+        },
+        "/payment/order": {            
+            "post": {
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "use *x-access-token* inside header",
+                        "required": true
+                    },
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "All fields are mandatory..",
+                        "schema": {
+                            "$ref": "#/definitions/orderCreate"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order Created"
+                    }
+                }
+            }         
+        },
+        "/chat-window": {            
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This endpont will give you an interface to check chat interaction. Open this url in browser."
+                    }
+                }
+            }          
+        }
+    },
+         
+    "definitions": {
+        "CreateUser": {
+            "required": [
+                "salutation",
+                "name",
+                "email",
+                "country",
+                "password",
+                "zappId",
+                "contact",
+                "tpin",
+                "touchId",
+                "faceId",
+                "securityImage",
+                "inviteCodeBool",
+                "inviteCode",
+                "currency"
+            ],
+            "properties": {
+                "salutation": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "zappId": {
+                    "type": "string"
+                },
+                "contact": {
+                    "type": "string"
+                },
+                "tpin": {
+                    "type": "string"
+                },
+                "touchId": {
+                    "type": "boolean"
+                },
+                "faceId": {
+                    "type": "boolean"
+                },
+                "securityImage": {
+                    "type": "string"
+                },
+                "inviteCodeBool": {
+                    "type": "boolean"
+                },
+                "inviteCode": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string",
+                    "enum" : ["MYR","SGD","USD","EUR","AUD","GBP"]
+                        
+                }
+
+
+            }
+        },
+        "AuthPayload": {
+            "required": [
+                "credential",
+                "password"
+            ],
+            "properties": {
+                "credential": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdatePayload": {
+            "required": [
+                "credential",
+                "oldtpin",
+                "newtpin"
+            ],
+            "properties": {
+                "credential": {
+                    "type": "string"
+                },
+                "oldtpin": {
+                    "type": "string"
+                },
+                "newtpin": {
+                    "type": "string"
+                }
+            }
+        },
+        "SmsPayload": {
+            "required": [
+                "PhoneNo"
+            ],
+            "properties": {
+                "PhoneNo": {
+                    "type": "string"
+                }
+            }
+        },
+        "TacVerificationPayload": {
+            "required": [
+                "PhoneNo",
+                "tac"
+            ],
+            "properties": {
+                "PhoneNo": {
+                    "type": "string"
+                },
+                "tac": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserSearchPayload": {
+            "required": [
+                "credential"
+            ],
+            "properties": {
+                "credential": {
+                    "type": "string"
+                }
+            }
+        },
+        "generateInviteCode": {
+            "required": [
+                "x-access-token"
+            ],
+            "properties": {
+                "x-access-token": {
+                    "type": "string"
+                }
+            }
+        },
+        "CheckInviteCode" : {
+            "required": [
+                "inviteCode"
+            ],
+            "properties": {
+                "inviteCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "UseInviteCode" : {
+            "required": [
+                "inviteCode",
+                "inviteCodeUser"
+            ],
+            "properties": {
+                "inviteCode": {
+                    "type": "string"
+                },
+                "inviteCodeUser": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "uploadfile": {
+            "required": [
+                "file"
+            ],
+            "properties": {
+                "file": {
+                    "type": "file"
+                }
+            }
+        },
+        "deleteResource": {
+            "required": [
+                "deleteId"
+            ],
+            "properties": {
+                "deleteId": {
+                    "type": "string"
+                }
+            }
+        },
+        "orderCreate": {
+            "required": [
+                "transactionType",
+                "orderDetail",
+                "orderAmount"
+            ],
+            "properties": {
+                "transactionType": {
+                    "type": "string"
+                },
+                "orderDetail": {
+                    "type": "string"
+                },
+                "orderAmount": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

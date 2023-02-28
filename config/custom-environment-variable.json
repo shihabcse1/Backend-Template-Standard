@@ -1,0 +1,24 @@
+{
+    "appname" : "appname",
+    "mongoUrl" : "mongoUrl",
+    "database" : "database",
+    "app_dbuser" : "app_dbuser",  
+    "app_dbpassword" : "app_dbpassword",
+    "app_salt": "app_salt",
+    "app_jwttoken" : "app_jwttoken",
+    "app_authentication" : "app_authentication",
+    "app_elasticServer" :"app_elasticServer",
+    "app_base_url" : "app_base_url",
+    "app_security_image_folder" : "app_security_image_folder",
+    "app_security_image_serve" : "app_security_image_serve",
+    "tac_endpoint" : "tac_endpoint",
+    "upay_identifier": "upay_identifier",
+    "upay_verifyKey": "upay_verifyKey",
+    "callback_url" : "callback_url",
+    "registration_invite_code_redeem_value" : "registration_invite_code_redeem_value",
+    "CONDITION_DEFAULT" : "CONDITION_DEFAULT",
+    "CONDITION_UPDATE": "CONDITION_UPDATE"
+
+}
+
+

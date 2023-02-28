@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+
+<form id="submit_form" name="submit_form" class="text-center border border-light p-5" 
+action="https://uat.upay2us.com/iServeGateway/transaction_window" method="post">
+
+    <p class="h4 mb-4">I-Serve Payment Gateway</p>
+
+    <!-- Payment_method -->
+    <select name="PAYMENT_METHOD" id="PAYMENT_METHOD" class="form-control mb-4">
+      <option value="">-select-</option>
+      <option>FPX</option>
+      <option>DEBIT</option>
+      <option>CREDIT</option>
+    </select>
+  
+
+    <!-- Merchant Identifier -->
+    <input type="input" name="MERCHANT_IDENTIFIER" id="MERCHANT_IDENTIFIER" value="" class="form-control mb-4" placeholder="Merchant Identifier">
+    
+
+    <!-- AMOUNT -->
+    <input type="text" name="AMOUNT" id="AMOUNT" value="" class="form-control mb-4" placeholder="Amount">
+
+    <!-- TXN_DESC -->
+    <input type="input" name="TXN_DESC" id="TXN_DESC" value = "" class="form-control mb-4" placeholder="Txn description" required>
+
+    <!-- CUSTOMER_ID -->
+    <input type="input" name="CUSTOMER_ID" id="CUSTOMER_ID" value = ""  class="form-control mb-4" placeholder="Customer Id">
+
+    <!-- ORDER_ID -->
+    <input type="input" name="ORDER_ID" id="ORDER_ID"  value = ""  class="form-control mb-4" placeholder="Order Id">
+
+
+    <!-- CUSTOMER_NAME -->
+    <input type="input" name="CUSTOMER_NAME" id="CUSTOMER_NAME"  value = ""  class="form-control mb-4" placeholder="Customer name">
+
+    <!-- CUSTOMER_EMAIL -->
+    <input type="input" name="CUSTOMER_EMAIL" id="CUSTOMER_EMAIL"  value = ""  class="form-control mb-4" placeholder="Customer email">
+
+    <!-- CUSTOMER_MOBILE -->
+    <input type="input" name="CUSTOMER_MOBILE" id="CUSTOMER_MOBILE"  value = "" class="form-control mb-4" placeholder="Customer mobile">
+
+    <!-- CUSTOMER_IP -->
+    <input type="input" name="CUSTOMER_IP" id="CUSTOMER_IP"  value = "" class="form-control mb-4" placeholder="Customer IP">
+
+    <!-- CALLBACK_URL -->
+    <input type="input" name="CALLBACK_URL" id="CALLBACK_URL"  value = "" class="form-control mb-4" placeholder="Callback url">
+
+     <!-- TXN_SIGNATURE -->
+     <input type="input" name="TXN_SIGNATURE" id="TXN_SIGNATURE"  value = "" class="form-control mb-4" placeholder="Txn Signature">
+
+     <input type="hidden" name="IS_TEST" id="IS_TEST" value="Y" >
+
+
+    <!-- Sign in button -->
+    <button class="btn btn-info btn-block my-4" type="submit"  name="PAYMENT_METHOD" >Submit</button>
+</form>
+
+
+
+
+

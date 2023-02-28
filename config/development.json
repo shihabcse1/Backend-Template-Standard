@@ -1,0 +1,23 @@
+{
+    "appname" : "Elastic Mongo Node",
+    "mongoUrl" : "localhost:27017",
+    "database" : "rootofelastic",
+    "TEST_mongoUrl" : "localhost:27017",
+    "TEST_database" : "rootofelastic_test",
+    "app_dbuser" : "",  
+    "app_dbpassword" : "",
+    "app_salt": 7,
+    "app_jwttoken" : "generateToken@12345",
+    "app_authentication" : true,
+    "app_elasticServer" :"http://localhost:9200",
+    "app_base_url" : "http://localhost:4000",
+    "app_security_image_folder" : "public/security_image",
+    "app_security_image_serve" : 9,
+    "tac_endpoint" : "http://202.87.106.141/SMS/api/SendSMS",
+    "upay_identifier": "UPAY_DEMO",
+    "upay_verifyKey": "SmU7pGAmSAE5pQDY",
+    "callback_url" : "/payment/response/callback",
+    "registration_invite_code_redeem_value" : 10,
+    "CONDITION_DEFAULT" : "NOT-YET",
+    "CONDITION_UPDATE": "USED"
+}

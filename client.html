@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Node-Kafka-Redis-SOcket.io</title>
+      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   </head>
+   <script src = "http://localhost:4000/socket.io/socket.io.js"></script>
+   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+   
+   <div class="jumbotron text-center">
+      <h1>Node-Kafka-Redis-Socket Chat Client Interface</h1>
+      <p>Resize this responsive page to see the effect!</p>
+      <button onclick="getMissingMessage()" id="sendMessage" style="float:right" type="button" class="btn btn-primary">Get missing message(One to One)</button>
+
+   </div>
+    
+   <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+         <div>
+            
+            <input type="text" id="generateId" placeholder="Give user id" class="form-control" /> 
+            <button onclick="join()" id="joinButton" type="button" class="btn btn-primary" style="margin-top:10px">Join</button> 
+             
+            <span id="userName" style="color:blueviolet;font-weight: bold;margin-top: 20px;"></span>
+
+
+            <div  style="margin-top: 20px;">Add user to a Group</div>
+            <!-- <input id="groupName" type="text" placeholder="group name"> -->
+            <select id="groupName" class="form-control">
+               <option >-Select Group Name-</option>
+               <option>Sales-Work</option>
+               <option>IT-Work</option>
+               <option>Markating-Work</option>
+            </select>
+            
+            <button onclick="joinGroup()" id="joinGroup" type="button" class="btn btn-primary" style="margin-top:10px" >Join</button>
+            <span id="joined-notification">
+
+
+         </div>  
+        </div>
+        <div class="col-sm-4">
+         <div  style="border-bottom:2px solid RED;">Send Private Message</div>
+         <input id="receiver" type="text" placeholder="Receiver Id" class="form-control" style="margin-top:10px">
+         <input id="message" type="text" placeholder="Message to Sent" class="form-control" style="margin-top:10px">
+         <button onclick="sendMessage()" id="sendMessage" type="button" class="btn btn-primary" style="margin-top:10px">END MESSAGE</button> 
+       
+         <div style="margin-top: 20px;border-bottom:2px solid RED;">
+         Browse Image : </div>
+         <input type="file" id="imagefile" class="form-control">   <input id="imgBS64" type="hidden">
+         <button onclick="sendMessageImg()" id="sendMessageImg" type="button" class="btn btn-primary" style="margin-top:10px">SEND IMAGE</button> 
+         
+         
+        </div>
+        
+        <div class="col-sm-4">
+
+         <div id="message-received">Private Message will be appened here -</div>
+        </div>
+      </div>
+
+
+      <div class="row" style="margin-top:20px;border-top:2px solid Blue">
+            <div class="col-sm-4">
+
+
+
+                  <div style="margin-top:10px;border-bottom:2px solid RED">Group Message: 
+                     <!-- <input id="receiverGroup" type="text" placeholder="Group name"> -->
+                     
+                  </div>
+                  <select id="receiverGroup" class="form-control">
+                     <option disabled>-Select-</option>
+                     <option>Sales-Work</option>
+                     <option>IT-Work</option>
+                     <option>Markating-Work</option>
+                  </select>
+                  <div style="margin-top:10px">
+                     <input id="messageGroup" type="text" placeholder="TYpe your message" class="form-control" style="margin-top:10px">
+                     
+                     <button onclick="sendMessageGroup()" id="sendMessageGroup" type="button" class="btn btn-primary" style="margin-top:10px" >SEND MESSAGE</button>
+                     
+                  </div>
+               
+                  <div style="margin-top:10px">
+                     Browse Image : <input type="file" id="imagefileGroup">   <input id="imgBS64Group" type="hidden">
+                     <button onclick="sendMessageImgGroup()" id="sendMessageImgGroup" type="button" class="btn btn-primary">SEND IMAGE</button> 
+                  </div>
+                  
+      
+      
+
+
+            </div>
+
+            <div class="col-sm-8">
+
+
+            
+            
+               <div id="GroupMessage" >Group Message will be appened here -</div><br>
+
+
+
+         </div>
+
+      </div>
+         
+
+   </div>
+   <script>
+      var socket = io();
+      function join()
+      {  
+         //var name = "user-"+Math.random().toString(36).substr(2, 9);
+         var name = document.getElementById("generateId").value;
+         socket.emit('new-user', name) 
+         document.getElementById("userName").innerText = "Your user name : " +name;
+         $("#joinButton").hide();
+      }
+
+      function joinGroup()
+      {
+         var groupName = document.getElementById("groupName").value;
+         var memberName = document.getElementById("userName").value;
+         socket.emit("join-group",{"groupName" : groupName, "memberName" : memberName})
+      }
+
+      socket.on("joined-notification",data=>{
+         document.getElementById("joined-notification").innerHTML = data;
+      })
+
+      function sendMessage()
+      {
+         socket.emit("send-message",{        
+            "message" : document.getElementById("message").value,
+            "receiver": document.getElementById("receiver").value,
+            "from": document.getElementById("generateId").value  
+         })  
+
+         $('#message-received').append($('<li>').text(document.getElementById("message").value));
+          
+      }
+
+      //one-to-one msg
+      function sendMessageImg()
+      {
+         socket.emit('user-image-send', {
+            "message" : $("#imgBS64").val(),
+            "receiver": document.getElementById("receiver").value,
+            "from": document.getElementById("generateId").value  
+         });
+         
+         $('#message-received').append($('<p>').append('<img src="' + $("#imgBS64").val() + '" style="height:100px;height:100px;"/>'));
+         $("#imgBS64").val("");
+      }
+
+      $('#imagefile').on('change', function(e){
+         $("#imgBS64").val("");
+         var file = e.originalEvent.target.files[0],
+         reader = new FileReader();
+         reader.onload = function(evt){
+            console.log(evt.target.result)
+            $("#imgBS64").val(evt.target.result);
+         };
+         reader.readAsDataURL(file);  
+      });
+
+
+      //Group Image
+      $('#imagefileGroup').on('change', function(e){
+         $("#imgBS64Group").val("");
+         var file = e.originalEvent.target.files[0],
+         reader = new FileReader();
+         reader.onload = function(evt){
+            $("#imgBS64Group").val(evt.target.result);
+         };
+         reader.readAsDataURL(file);  
+      });
+      
+      function sendMessageImgGroup()
+      {
+         socket.emit('user-image-send-group', {
+            "message" : $("#imgBS64Group").val(),
+            "receiver": document.getElementById("receiverGroup").value,
+            "from": document.getElementById("generateId").value  
+         });
+         $("#imgBS64Group").val("");
+
+      }
+
+
+
+      socket.on("message-receive",data=>{
+         //document.getElementById("message-received").innerHTML = data.message;
+         $('#message-received').append($('<li>').text(data.message +"[" + data.datetime + "]" + "(" + data.from + ")"));
+      })
+
+      function sendMessageGroup()
+      {
+         socket.emit("send-message-group",{        
+            "messageGroup" : document.getElementById("messageGroup").value,
+            "receiverGroup": document.getElementById("receiverGroup").value,
+            "from": document.getElementById("generateId").value  
+         })         
+      }
+
+      socket.on('Send-to-group', function(data){
+          console.log(data);
+          if(data.isImage === true)
+          {
+            $('#GroupMessage').append($('<p>').append('<img src="' + data.message + '" style="height:100px;height:100px;"/>'));
+          }
+          else
+          {
+            $('#GroupMessage').append($('<li>').text(data.message +"[" + data.datetime + "]" + "(" + data.from + ")"));
+          }
+         
+      });
+
+
+      function getMissingMessage()
+      {
+         var userId = document.getElementById("generateId").value;
+         socket.emit("missed-message",userId);
+      }
+
+      //receiving missed message
+      socket.on("sending-missed-message",(data)=>{
+         $('#message-received').append($('<li>').text(data.message +"[" + data.datetime + "]" + "(" + data.from + ")"));
+      })
+
+      socket.on('message-receive-img', (data)=>{
+         $('#message-received').append($('<p>').append('<img src="' + data.message + '" style="height:100px;height:100px;"/>'));
+      });
+
+            
+   </script>
+</html>
